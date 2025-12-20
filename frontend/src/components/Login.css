@@ -1,78 +1,302 @@
-.login-container {
+/* ==================== 弹窗遮罩 ==================== */
+.login-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
   display: flex;
-  justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  justify-content: center;
+  z-index: 1000;
+  animation: loginFadeIn 0.3s ease;
 }
 
-.login-box {
-  background: white;
-  padding: 40px;
-  border-radius: 10px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-  width: 100%;
-  max-width: 400px;
+@keyframes loginFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
-.login-box h2 {
-  margin: 0 0 30px 0;
+/* ==================== 弹窗内容 ==================== */
+.login-modal-content {
+  position: relative;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  max-width: 420px;
+  padding: 2rem;
+  animation: loginSlideUp 0.3s ease;
+  border: 1px solid #e5e7eb;
+}
+
+@keyframes loginSlideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ==================== 关闭按钮 ==================== */
+.login-modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: #f3f4f6;
+  color: #6b7280;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.login-modal-close:hover {
+  background: #e5e7eb;
+  color: #374151;
+  transform: rotate(90deg);
+}
+
+/* ==================== 弹窗头部 ==================== */
+.login-modal-header {
   text-align: center;
-  color: #333;
+  margin-bottom: 2rem;
+  padding-top: 0.5rem;
 }
 
-.form-group {
-  margin-bottom: 20px;
+.login-modal-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 0.6rem 0;
 }
 
-.form-group label {
-  display: block;
-  margin-bottom: 5px;
-  color: #555;
-  font-weight: 500;
+.login-modal-subtitle {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin: 0;
 }
 
-.form-group input {
+/* ==================== 表单样式 ==================== */
+.login-modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+/* 错误提示 */
+.login-error-message {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  color: #dc2626;
+  font-size: 0.85rem;
+  animation: loginShake 0.4s ease;
+}
+
+@keyframes loginShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.login-error-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+/* 表单组 */
+.login-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.login-form-label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.login-label-icon {
+  font-size: 0.95rem;
+}
+
+.login-form-input {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 14px;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  outline: none;
+  transition: all 0.3s ease;
+  background: #f9fafb;
+  color: #1f2937;
   box-sizing: border-box;
 }
 
-.form-group input:focus {
-  outline: none;
-  border-color: #667eea;
+.login-form-input:focus {
+  border-color: #1a73e8;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
 }
 
-.error-message {
-  color: #e74c3c;
-  background: #fadbd8;
-  padding: 10px;
-  border-radius: 5px;
-  margin-bottom: 15px;
-  font-size: 14px;
-}
-
-button[type="submit"] {
-  width: 100%;
-  padding: 12px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-
-button[type="submit"]:hover:not(:disabled) {
-  transform: translateY(-2px);
-}
-
-button[type="submit"]:disabled {
+.login-form-input:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.login-form-input::placeholder {
+  color: #9ca3af;
+}
+
+/* 提交按钮 */
+.login-submit-btn {
+  width: 100%;
+  padding: 0.85rem 1.5rem;
+  background: linear-gradient(135deg, #1a73e8 0%, #4285f4 100%);
+  border: none;
+  border-radius: 10px;
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 12px rgba(26, 115, 232, 0.3);
+}
+
+.login-submit-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(26, 115, 232, 0.4);
+}
+
+.login-submit-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.login-submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* 按钮加载动画 */
+.login-btn-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: loginSpin 0.8s linear infinite;
+}
+
+@keyframes loginSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* 表单底部 */
+.login-form-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid #f3f4f6;
+  margin-top: 0.5rem;
+}
+
+.login-footer-text {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.login-switch-btn {
+  background: none;
+  border: none;
+  color: #1a73e8;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.2s ease;
+}
+
+.login-switch-btn:hover:not(:disabled) {
+  color: #1557b0;
+  text-decoration: underline;
+}
+
+.login-switch-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ==================== 响应式设计 ==================== */
+@media (max-width: 480px) {
+  .login-modal-content {
+    padding: 1.5rem;
+    width: 95%;
+  }
+
+  .login-modal-close {
+    width: 28px;
+    height: 28px;
+    font-size: 1rem;
+  }
+
+  .login-modal-title {
+    font-size: 1.3rem;
+  }
+
+  .login-modal-subtitle {
+    font-size: 0.85rem;
+  }
+
+  .login-form-input {
+    padding: 0.7rem 0.9rem;
+    font-size: 0.85rem;
+  }
+
+  .login-submit-btn {
+    padding: 0.75rem 1.2rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* ==================== 平滑过渡效果 ==================== */
+.login-modal-overlay,
+.login-modal-content,
+.login-modal-close,
+.login-form-input,
+.login-submit-btn,
+.login-switch-btn {
+  transition: all 0.3s ease;
 }
