@@ -9,6 +9,15 @@ export class Website {
   @Column({ length: 100 })
   title: string;
 
+  // 添加一个虚拟属性，用于接收 name 字段的输入
+  get name(): string {
+    return this.title;
+  }
+
+  set name(value: string) {
+    this.title = value;
+  }
+
   @Column({ length: 500 })
   url: string;
 

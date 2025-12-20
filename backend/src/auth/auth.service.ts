@@ -4,7 +4,7 @@ import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class AuthService {
-  private readonly authServiceUrl = process.env.AUTH_SERVICE_URL || 'http://localhost:3001';
+  private readonly authServiceUrl = process.env.AUTH_SERVICE_URL || 'http://localhost:3000';
 
   constructor(private httpService: HttpService) {}
 

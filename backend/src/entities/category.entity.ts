@@ -5,8 +5,8 @@ export class Category {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 50 })
-  name: string;
+  @Column({ length: 50, name: 'title' })
+  name: string; // 保持属性名为 name，但映射到数据库的 title 字段
 
   @Column({ length: 50, nullable: true })
   icon: string;
