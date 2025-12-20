@@ -1,7 +1,7 @@
 import axios from 'axios';
 import type { Category, Website } from '../types/index';
 
-const API_BASE_URL = 'http://localhost:3001'; // 导航系统的后端地址
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001'; // 导航系统的后端地址
 
 // 创建 axios 实例
 const apiClient = axios.create({
