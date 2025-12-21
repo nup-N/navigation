@@ -22,18 +22,120 @@ function App() {
   const categoryRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
 
   useEffect(() => {
-    const token = authService.getToken();
-    setIsAuthenticated(!!token);
-    if (token) {
-      const userInfo = localStorage.getItem('user');
-      if (userInfo) {
-        setUser(JSON.parse(userInfo));
+    // 检查URL参数中是否有统一认证的token
+    const urlParams = new URLSearchParams(window.location.search);
+    const ssoToken = urlParams.get('token');
+    
+    if (ssoToken) {
+      // 如果有统一认证的token，自动登录
+      handleSSOLogin(ssoToken);
+      // 清除URL中的token参数（保持URL干净）
+      const newUrl = window.location.pathname;
+      window.history.replaceState({}, '', newUrl);
+    } else {
+      // 检查本地token
+      const token = authService.getToken();
+      setIsAuthenticated(!!token);
+      if (token) {
+        const userInfo = localStorage.getItem('user');
+        if (userInfo) {
+          setUser(JSON.parse(userInfo));
+        }
       }
     }
+    
     // 无论是否登录，都加载数据（允许匿名访问）
     loadCategories();
     loadWebsites();
   }, []);
+  
+  // 处理SSO登录（统一认证系统传递的token）
+  const handleSSOLogin = async (token: string) => {
+    try {
+      console.log('🔐 [SSO] 检测到统一认证token，开始自动登录...');
+      
+      // 保存token到localStorage（navigation系统使用'token'作为key）
+      localStorage.setItem('token', token);
+      
+      // 调用website认证服务验证token并获取用户信息
+      const authApiUrl = import.meta.env.VITE_AUTH_API_BASE_URL || 'http://localhost:3000';
+      
+      try {
+        // 使用validate端点验证token并获取用户信息
+        const validateResponse = await fetch(`${authApiUrl}/api/auth/validate`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+        
+        if (validateResponse.ok) {
+          const validateData = await validateResponse.json();
+          if (validateData.valid && validateData.user) {
+            // 保存用户信息
+            localStorage.setItem('user', JSON.stringify(validateData.user));
+            setUser(validateData.user);
+            setIsAuthenticated(true);
+            console.log('✅ [SSO] 自动登录成功:', validateData.user);
+            
+            // 登录成功后，重新加载需要认证的数据
+            await loadWebsites();
+            await loadCategories();
+            
+            // 加载"我的"分类的网站
+            try {
+              const response = await websiteApi.getAll(-1);
+              setMyWebsites(response.data);
+            } catch (error) {
+              console.error('加载"我的"分类失败:', error);
+            }
+            return;
+          }
+        }
+        
+        // 如果validate失败，尝试使用me端点
+        console.log('⚠️ [SSO] validate端点失败，尝试使用me端点...');
+        const meResponse = await fetch(`${authApiUrl}/api/auth/me`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+        
+        if (meResponse.ok) {
+          const userData = await meResponse.json();
+          localStorage.setItem('user', JSON.stringify(userData));
+          setUser(userData);
+          setIsAuthenticated(true);
+          console.log('✅ [SSO] 自动登录成功（通过me端点）:', userData);
+          
+          // 登录成功后，重新加载需要认证的数据
+          await loadWebsites();
+          await loadCategories();
+          
+          // 加载"我的"分类的网站
+          try {
+            const response = await websiteApi.getAll(-1);
+            setMyWebsites(response.data);
+          } catch (error) {
+            console.error('加载"我的"分类失败:', error);
+          }
+          return;
+        }
+        
+        throw new Error('无法获取用户信息');
+      } catch (error) {
+        console.error('❌ [SSO] 获取用户信息失败:', error);
+        // 即使获取用户信息失败，也保存token（可能后端会验证）
+        setIsAuthenticated(true);
+      }
+    } catch (error) {
+      console.error('❌ [SSO] 自动登录失败:', error);
+      // 清除无效的token
+      localStorage.removeItem('token');
+    }
+  };
 
   const loadCategories = async () => {
     try {
@@ -257,6 +359,7 @@ function App() {
     });
   };
 
+
   const filteredWebsites = websites.filter(website =>
     website.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
     website.description?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -318,7 +421,7 @@ function App() {
             <div className="logo-icon">
               <span>🧭</span>
             </div>
-            <span className="logo-text">我的导航</span>
+            <span className="logo-text">Nnup の Navigation</span>
           </div>
 
           <div className="header-search">
@@ -327,9 +430,24 @@ function App() {
               placeholder="可输入系统名称或关键字进行检索"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && searchTerm.trim()) {
+                  const bingSearchUrl = `https://www.bing.com/search?q=${encodeURIComponent(searchTerm.trim())}`;
+                  window.open(bingSearchUrl, '_blank');
+                }
+              }}
               className="search-input"
             />
-            <button className="search-btn">🔍</button>
+            <button 
+              className="search-btn" 
+              onClick={() => {
+                if (searchTerm.trim()) {
+                  const bingSearchUrl = `https://www.bing.com/search?q=${encodeURIComponent(searchTerm.trim())}`;
+                  window.open(bingSearchUrl, '_blank');
+                }
+              }}
+              title="Bing搜索"
+            >🔍</button>
           </div>
 
           <div className="header-user">
@@ -517,7 +635,7 @@ function App() {
 
       <footer className="footer">
         <div className="footer-content">
-          <p className="footer-text">© 2024 我的导航系统 - 让工作更高效</p>
+          <p className="footer-text">© Nnup</p>
         </div>
       </footer>
 

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CategoriesModule } from './categories/categories.module';
 import { WebsitesModule } from './websites/websites.module';
 import { AuthModule } from './auth/auth.module';
@@ -13,24 +13,29 @@ import { UserWebsiteFavorite } from './entities/user-website-favorite.entity';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: '.env',
     }),
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'localhost',
-      port: 3307,  // 改成 3307
-      username: 'root',
-      password: 'root',
-      database: 'navigation',
-      entities: [Category, Website, UserWebsiteFavorite],
-      synchronize: true,
-      // 设置字符集为 UTF-8，支持中文
-      charset: 'utf8mb4',
-      extra: {
-        // MySQL 连接选项
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'mysql',
+        host: configService.get('DB_HOST', 'localhost'),
+        port: configService.get<number>('DB_PORT', 3307),
+        username: configService.get('DB_USERNAME', 'root'),
+        password: configService.get('DB_PASSWORD', 'root'),
+        database: configService.get('DB_DATABASE', 'navigation'),
+        entities: [Category, Website, UserWebsiteFavorite],
+        // 生产环境应关闭 synchronize，使用迁移
+        synchronize: configService.get('NODE_ENV') === 'development',
+        // 设置字符集为 UTF-8，支持中文
         charset: 'utf8mb4',
-      },
-      // 连接后执行的 SQL，确保使用 UTF-8
-      connectTimeout: 60000,
+        extra: {
+          charset: 'utf8mb4',
+        },
+        connectTimeout: 60000,
+        // 生产环境关闭 SQL 日志
+        logging: configService.get('NODE_ENV') === 'development',
+      }),
     }),
     CategoriesModule,
     WebsitesModule,
