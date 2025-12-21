@@ -52,6 +52,13 @@ class AuthService {
       `${AUTH_API_URL}/register`,
       data
     );
+
+    // 保存 Token 和用户信息（注册成功后自动登录）
+    if (response.data.access_token) {
+      localStorage.setItem(TOKEN_KEY, response.data.access_token);
+      localStorage.setItem(USER_KEY, JSON.stringify(response.data.user));
+    }
+
     return response.data;
   }
 

@@ -1,10 +1,25 @@
-# compiled output
+# ==================== 编译输出 ====================
 /dist
-/node_modules
 /build
+*.tsbuildinfo
+tsconfig.build.tsbuildinfo
 
-# Logs
-logs
+# ==================== 依赖包 ====================
+/node_modules
+/.pnpm-store
+/.yarn
+/.pnp.*
+
+# ==================== 环境变量 ====================
+.env
+.env.*
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# ==================== 日志文件 ====================
+logs/
 *.log
 npm-debug.log*
 pnpm-debug.log*
@@ -12,15 +27,18 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 
-# OS
-.DS_Store
-
-# Tests
+# ==================== 测试和覆盖率 ====================
 /coverage
 /.nyc_output
+/.jest
 
-# IDEs and editors
+# ==================== IDE 和编辑器 ====================
 /.idea
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
 .project
 .classpath
 .c9/
@@ -28,29 +46,17 @@ lerna-debug.log*
 .settings/
 *.sublime-workspace
 
-# IDE - VSCode
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
+# ==================== 操作系统文件 ====================
+.DS_Store
+Thumbs.db
 
-# dotenv environment variable files
-.env
-.env.development.local
-.env.test.local
-.env.production.local
-.env.local
-
-# temp directory
+# ==================== 临时文件 ====================
 .temp
 .tmp
-
-# Runtime data
-pids
+pids/
 *.pid
 *.seed
 *.pid.lock
 
-# Diagnostic reports (https://nodejs.org/api/report.html)
+# ==================== 诊断报告 ====================
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json

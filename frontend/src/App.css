@@ -138,6 +138,25 @@ body {
   border-radius: 14px;
 }
 
+.add-website-header-btn {
+  padding: 0.45rem 1.1rem;
+  background: #1a73e8;
+  border: none;
+  border-radius: 14px;
+  color: white;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all 0.2s;
+  margin-right: 0.5rem;
+}
+
+.add-website-header-btn:hover {
+  background: #1557b0;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(26, 115, 232, 0.3);
+}
+
 .logout-btn {
   padding: 0.45rem 1.1rem;
   background: #ffffff;
@@ -215,13 +234,30 @@ body {
   gap: 0.2rem;
 }
 
+.category-tag-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  border-left: 3px solid transparent;
+  border-radius: 6px;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.category-tag-wrapper:hover {
+  background: #f9fafb;
+}
+
+.category-tag-wrapper:hover .category-delete-btn {
+  opacity: 1;
+}
+
 .category-tag {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   padding: 0.6rem 0.85rem;
   border: none;
-  border-left: 3px solid transparent;
   border-radius: 6px;
   font-size: 0.85rem;
   font-weight: 500;
@@ -231,10 +267,11 @@ body {
   background: transparent;
   color: #6b7280;
   text-align: left;
+  flex: 1;
 }
 
 .category-tag:hover {
-  background: #f9fafb;
+  background: transparent;
   color: #1f2937;
 }
 
@@ -242,6 +279,25 @@ body {
   background: #eff6ff;
   color: #1a73e8;
   font-weight: 600;
+}
+
+.category-delete-btn {
+  padding: 0.25rem 0.5rem;
+  background: rgba(239, 68, 68, 0.9);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  opacity: 0;
+  transition: all 0.2s;
+  color: white;
+  margin-right: 0.5rem;
+  flex-shrink: 0;
+}
+
+.category-delete-btn:hover {
+  background: rgba(220, 38, 38, 1);
+  transform: scale(1.1);
 }
 
 .tag-icon {
@@ -402,22 +458,83 @@ body {
 .website-card {
   background: #ffffff;
   border-radius: 10px;
-  padding: 1.1rem;
-  cursor: pointer;
+  padding: 0;
   transition: all 0.3s ease;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   border: 1px solid #e5e7eb;
   border-top: 3px solid #e5e7eb;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.website-card-content {
+  padding: 1.1rem;
+  cursor: pointer;
+  flex: 1;
   display: flex;
   gap: 0.9rem;
-  position: relative;
-  overflow: hidden;
 }
 
 .website-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
   border-color: #1a73e8;
+}
+
+.website-card:hover .website-delete-btn,
+.website-card:hover .website-favorite-btn {
+  opacity: 1;
+}
+
+.website-favorite-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 2.5rem;
+  background: rgba(255, 193, 7, 0.9);
+  border: none;
+  border-radius: 6px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.9rem;
+  opacity: 0;
+  transition: all 0.2s;
+  z-index: 10;
+  color: white;
+}
+
+.website-favorite-btn:hover {
+  background: rgba(255, 152, 0, 1);
+  transform: scale(1.1);
+}
+
+.website-delete-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: rgba(239, 68, 68, 0.9);
+  border: none;
+  border-radius: 6px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.9rem;
+  opacity: 0;
+  transition: all 0.2s;
+  z-index: 10;
+  color: white;
+}
+
+.website-delete-btn:hover {
+  background: rgba(220, 38, 38, 1);
+  transform: scale(1.1);
 }
 
 .website-icon {

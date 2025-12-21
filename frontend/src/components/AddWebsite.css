@@ -1,0 +1,368 @@
+.add-website-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.add-website-modal {
+  background: white;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  position: relative;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.add-website-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #666;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+
+.add-website-close:hover {
+  background: #f0f0f0;
+  color: #333;
+}
+
+.add-website-header {
+  padding: 2rem 2rem 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.add-website-title {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.add-website-subtitle {
+  margin: 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.add-website-form {
+  padding: 1.5rem 2rem 2rem;
+}
+
+.add-website-error {
+  background: #fee;
+  color: #c33;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.add-website-error-icon {
+  font-size: 1.2rem;
+}
+
+.add-website-form-group {
+  margin-bottom: 1.5rem;
+}
+
+.add-website-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+.add-website-label-icon {
+  font-size: 1.1rem;
+}
+
+.add-website-input,
+.add-website-select,
+.add-website-textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.add-website-input:focus,
+.add-website-select:focus,
+.add-website-textarea:focus {
+  outline: none;
+  border-color: #1a73e8;
+  box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
+}
+
+.add-website-input:disabled,
+.add-website-select:disabled,
+.add-website-textarea:disabled {
+  background: #f5f5f5;
+  cursor: not-allowed;
+}
+
+.add-website-category-wrapper {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.add-website-select {
+  flex: 1;
+}
+
+.add-website-new-category-btn {
+  padding: 0.75rem 1rem;
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  color: #374151;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.add-website-new-category-btn:hover:not(:disabled) {
+  background: #e5e7eb;
+  border-color: #9ca3af;
+}
+
+.add-website-new-category-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.add-website-new-category-form {
+  margin-top: 0.75rem;
+  padding: 1rem;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+.add-website-new-category-inputs {
+  margin-bottom: 0.75rem;
+}
+
+.add-website-create-category-btn {
+  width: 100%;
+  padding: 0.65rem 1rem;
+  background: #10b981;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.add-website-create-category-btn:hover:not(:disabled) {
+  background: #059669;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+}
+
+.add-website-create-category-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.add-website-icon-selector {
+  margin-top: 0.5rem;
+}
+
+.add-website-icon-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.add-website-icon-item {
+  width: 100%;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #e5e7eb;
+  border-radius: 6px;
+  background: white;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: all 0.2s;
+  padding: 0;
+}
+
+.add-website-icon-item:hover:not(:disabled) {
+  border-color: #1a73e8;
+  background: #eff6ff;
+  transform: scale(1.1);
+}
+
+.add-website-icon-item.selected {
+  border-color: #1a73e8;
+  background: #dbeafe;
+  box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+}
+
+.add-website-icon-item:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.add-website-icon-custom {
+  margin-top: 0.75rem;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.add-website-icon-custom .add-website-input {
+  flex: 1;
+}
+
+.add-website-icon-clear {
+  padding: 0.5rem 1rem;
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  color: #374151;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.add-website-icon-clear:hover:not(:disabled) {
+  background: #e5e7eb;
+  border-color: #9ca3af;
+}
+
+.add-website-icon-clear:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.add-website-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.add-website-submit {
+  width: 100%;
+  padding: 0.85rem 1.5rem;
+  background: #1a73e8;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.add-website-submit:hover:not(:disabled) {
+  background: #1557b0;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(26, 115, 232, 0.3);
+}
+
+.add-website-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.add-website-cancel {
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  background: #f5f5f5;
+  color: #666;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.add-website-cancel:hover:not(:disabled) {
+  background: #e0e0e0;
+}
+
+.add-website-cancel:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.add-website-btn-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+

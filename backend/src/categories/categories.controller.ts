@@ -13,6 +13,8 @@ import { CategoriesService } from './categories.service';
 import { Category } from '../entities/category.entity';
 import { AuthGuard } from '../guards/auth.guard';
 import { OptionalAuthGuard } from '../guards/optional-auth.guard';
+import { RolesGuard } from '../guards/roles.guard';
+import { Roles } from '../guards/roles.decorator';
 
 /**
  * 分类控制器
@@ -28,13 +30,14 @@ export class CategoriesController {
   /**
    * 获取所有分类
    * 🔓 公开接口 - 允许匿名访问
+   * - 如果用户已登录，会在最前面添加"我的"分类
    */
   @Get()
   @UseGuards(OptionalAuthGuard)
   findAll(@Request() req): Promise<Category[]> {
     console.log('📋 [GET /categories] 获取所有分类');
     console.log('👤 当前用户:', req.user || '匿名用户');
-    return this.categoriesService.findAll();
+    return this.categoriesService.findAll(req.user);
   }
 
   /**
@@ -51,10 +54,11 @@ export class CategoriesController {
 
   /**
    * 创建分类
-   * 🔐 需要认证 - 必须登录
+   * 🔐 需要 admin 及以上角色
    */
   @Post()
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles('admin')
   create(@Body() category: Partial<Category>, @Request() req): Promise<Category> {
     console.log('📋 [POST /categories] 创建分类');
     console.log('👤 操作用户:', req.user);
@@ -64,10 +68,11 @@ export class CategoriesController {
 
   /**
    * 更新分类
-   * 🔐 需要认证 - 必须登录
+   * 🔐 需要 admin 及以上角色
    */
   @Put(':id')
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles('admin')
   update(
     @Param('id') id: string,
     @Body() category: Partial<Category>,
@@ -81,10 +86,11 @@ export class CategoriesController {
 
   /**
    * 删除分类
-   * 🔐 需要认证 - 必须登录
+   * 🔐 需要 admin 及以上角色
    */
   @Delete(':id')
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles('admin')
   remove(@Param('id') id: string, @Request() req): Promise<void> {
     console.log(`📋 [DELETE /categories/${id}] 删除分类`);
     console.log('👤 操作用户:', req.user);

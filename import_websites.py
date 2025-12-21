@@ -10,7 +10,7 @@ LOGIN_USERNAME = "admin"  # 修改为你的用户名
 LOGIN_PASSWORD = "123456"  # 修改为你的密码
 
 # 全局 token
-AUTH_TOKEN = None
+AUTH_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMsInVzZXJuYW1lIjoiYWRtaW4iLCJyb2xlIjoidXNlciIsImlhdCI6MTc2NjI5NTA2NSwiZXhwIjoxNzY2ODk5ODY1fQ.plSaNAnuQ-Nd5AydLtDqrb-SDVixqkvXfIQ3Z8lNcQI"
 
 # 完整网站数据
 websites_data = [
@@ -175,8 +175,9 @@ def create_category(category_name):
 def add_website(website_data, category_id):
     """添加网站"""
     try:
+        # 修改这里：使用title而不是name作为字段名
         data = {
-            "name": website_data["name"],
+            "title": website_data["name"],  # 改为title字段
             "url": website_data["url"],
             "description": website_data["description"],
             "categoryId": category_id,
@@ -193,7 +194,7 @@ def add_website(website_data, category_id):
             print(f"  ✅ {website_data['name']}")
             return True
         else:
-            print(f"  ❌ {website_data['name']}")
+            print(f"  ❌ {website_data['name']} - {response.status_code} {response.text}")
             return False
     except Exception as e:
         print(f"  ❌ {website_data['name']} - {e}")

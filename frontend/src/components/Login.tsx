@@ -5,9 +5,10 @@ import './Login.css';
 
 interface LoginProps {
   onLoginSuccess: () => void;
+  onClose?: () => void;
 }
 
-const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
+const Login: React.FC<LoginProps> = ({ onLoginSuccess, onClose }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -61,12 +62,8 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
       } else {
         const registerData: RegisterData = { username, password, email };
         await authService.register(registerData);
-        setError('');
-        setIsLogin(true);
-        setPassword('');
-        setConfirmPassword('');
-        setEmail('');
-        alert('注册成功！请登录');
+        // 注册成功后自动登录
+        onLoginSuccess();
       }
     } catch (err: any) {
       setError(err.response?.data?.message || (isLogin ? '登录失败，请检查用户名和密码' : '注册失败'));
@@ -77,6 +74,9 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
 
   const handleClose = () => {
     setShowModal(false);
+    if (onClose) {
+      onClose();
+    }
   };
 
   if (!showModal) {
