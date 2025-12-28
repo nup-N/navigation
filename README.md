@@ -59,43 +59,37 @@ navigation/
 
 ### 1. 配置环境变量
 
-在 `navigation` 目录创建 `.env` 文件：
+**只需要一个配置文件：** 在 `navigation` 目录创建 `.env` 文件
+
+前后端和Docker都会自动读取此文件。
 
 ```env
-# MySQL配置
-MYSQL_ROOT_PASSWORD=your_password
+# ==================== Docker 配置 ====================
+MYSQL_ROOT_PASSWORD=your_strong_password
 MYSQL_DATABASE=navigation
 MYSQL_PORT=3307
-```
 
-在 `navigation/backend` 目录创建 `.env` 文件：
-
-```env
-# 数据库配置
+# ==================== 后端配置 ====================
 DB_HOST=localhost
 DB_PORT=3307
 DB_USERNAME=root
-DB_PASSWORD=your_password
+DB_PASSWORD=your_strong_password
 DB_DATABASE=navigation
 
 # 统一认证服务URL（重要！）
 AUTH_SERVICE_URL=http://localhost:3000/api
 
-# 应用配置
 NODE_ENV=development
 PORT=3001
-```
+CORS_ORIGIN=http://localhost:5174
 
-在 `navigation/frontend` 目录创建 `.env` 文件：
-
-```env
-# API配置
+# ==================== 前端配置 ====================
 VITE_API_BASE_URL=http://localhost:3001/api
 VITE_AUTH_API_BASE_URL=http://localhost:3000
-
-# Website前端URL（底部链接）
 VITE_WEBSITE_URL=http://192.168.10.107:5173
 ```
+
+**详细配置说明：** [ENVIRONMENT.md](./ENVIRONMENT.md)
 
 ### 2. 启动服务
 
@@ -140,13 +134,14 @@ pnpm run build
 # 部署 dist 目录到 Nginx
 ```
 
-**生产环境变量配置：**
+**生产环境配置：** 在 `.env` 中修改对应变量
 
 ```env
-# frontend/.env
+NODE_ENV=production
 VITE_API_BASE_URL=https://nav.yourdomain.com/api
 VITE_AUTH_API_BASE_URL=https://auth.yourdomain.com
 VITE_WEBSITE_URL=https://www.yourdomain.com
+AUTH_SERVICE_URL=https://auth.yourdomain.com/api
 ```
 
 ## 🔧 API接口
