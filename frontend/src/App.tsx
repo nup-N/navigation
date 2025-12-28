@@ -476,12 +476,6 @@ function App() {
 
       <div className="main-wrapper">
         <aside className="sidebar">
-          <div className="sidebar-header">
-            <h2 className="sidebar-title">
-              <span className="title-icon">📂</span>
-              <span>分类导航</span>
-            </h2>
-          </div>
           <nav className="category-nav">
             {categories.map((category, index) => {
               const isActive = selectedCategory === category.id;
@@ -635,7 +629,25 @@ function App() {
 
       <footer className="footer">
         <div className="footer-content">
-          <p className="footer-text">© Nnup</p>
+          <p className="footer-text">
+            <a 
+              href={import.meta.env.VITE_WEBSITE_URL || 'http://192.168.10.107:5173'} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="footer-link"
+            >
+              Nnup
+            </a>
+            {' © '}
+            <a 
+              href="https://beian.miit.gov.cn/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="footer-link"
+            >
+              鄂ICP备2025166963号
+            </a>
+          </p>
         </div>
       </footer>
 

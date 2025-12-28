@@ -195,28 +195,28 @@ const AddWebsite: React.FC<AddWebsiteProps> = ({ categories, onSuccess, onClose,
             />
           </div>
 
-          <div className="add-website-form-group">
-            <label className="add-website-label">
-              <span className="add-website-label-icon">📂</span>
-              <span>分类 *</span>
-            </label>
-            <div className="add-website-category-wrapper">
-              <select
-                className="add-website-select"
-                value={formData.categoryId || ''}
-                onChange={(e) => handleChange('categoryId', e.target.value ? parseInt(e.target.value) : null)}
-                disabled={loading || creatingCategory || (user && (user.role === 'user' || user.role === 'premium'))}
-                required
-              >
-                <option value="">请选择分类</option>
-                {categories.map(category => (
-                  <option key={category.id} value={category.id}>
-                    {category.name}
-                  </option>
-                ))}
-              </select>
-              {/* 只有admin可以创建分类 */}
-              {(user && (user.role === 'admin' || user.role === 'super_admin')) && (
+          {/* 只有admin可以选择分类，普通用户直接添加到"我的"分类 */}
+          {user && (user.role === 'admin' || user.role === 'super_admin') && (
+            <div className="add-website-form-group">
+              <label className="add-website-label">
+                <span className="add-website-label-icon">📂</span>
+                <span>分类 *</span>
+              </label>
+              <div className="add-website-category-wrapper">
+                <select
+                  className="add-website-select"
+                  value={formData.categoryId || ''}
+                  onChange={(e) => handleChange('categoryId', e.target.value ? parseInt(e.target.value) : null)}
+                  disabled={loading || creatingCategory}
+                  required
+                >
+                  <option value="">请选择分类</option>
+                  {categories.map(category => (
+                    <option key={category.id} value={category.id}>
+                      {category.name}
+                    </option>
+                  ))}
+                </select>
                 <button
                   type="button"
                   className="add-website-new-category-btn"
@@ -228,87 +228,81 @@ const AddWebsite: React.FC<AddWebsiteProps> = ({ categories, onSuccess, onClose,
                 >
                   {showNewCategory ? '取消新建' : '➕ 新建分类'}
                 </button>
-              )}
-            </div>
-            {/* user用户提示信息 */}
-            {user && (user.role === 'user' || user.role === 'premium') && (
-              <div style={{ marginTop: '0.5rem', fontSize: '0.85rem', color: '#666' }}>
-                💡 普通用户只能将网站添加到"我的"分类
               </div>
-            )}
-            
-            {showNewCategory && (
-              <div className="add-website-new-category-form">
-                <div className="add-website-new-category-inputs">
-                  <input
-                    type="text"
-                    className="add-website-input"
-                    placeholder="分类名称 *"
-                    value={newCategoryData.name || ''}
-                    onChange={(e) => setNewCategoryData(prev => ({ ...prev, name: e.target.value }))}
-                    disabled={creatingCategory}
-                    style={{ marginBottom: '0.5rem' }}
-                  />
-                  <div className="add-website-icon-selector">
-                    <label className="add-website-label" style={{ marginBottom: '0.5rem' }}>
-                      <span className="add-website-label-icon">🎨</span>
-                      <span>选择图标（可选）</span>
-                    </label>
-                    <div className="add-website-icon-grid">
-                      {COMMON_ICONS.map((icon) => (
-                        <button
-                          key={icon}
-                          type="button"
-                          className={`add-website-icon-item ${newCategoryData.icon === icon ? 'selected' : ''}`}
-                          onClick={() => setNewCategoryData(prev => ({ ...prev, icon }))}
+              
+              {showNewCategory && (
+                <div className="add-website-new-category-form">
+                  <div className="add-website-new-category-inputs">
+                    <input
+                      type="text"
+                      className="add-website-input"
+                      placeholder="分类名称 *"
+                      value={newCategoryData.name || ''}
+                      onChange={(e) => setNewCategoryData(prev => ({ ...prev, name: e.target.value }))}
+                      disabled={creatingCategory}
+                      style={{ marginBottom: '0.5rem' }}
+                    />
+                    <div className="add-website-icon-selector">
+                      <label className="add-website-label" style={{ marginBottom: '0.5rem' }}>
+                        <span className="add-website-label-icon">🎨</span>
+                        <span>选择图标（可选）</span>
+                      </label>
+                      <div className="add-website-icon-grid">
+                        {COMMON_ICONS.map((icon) => (
+                          <button
+                            key={icon}
+                            type="button"
+                            className={`add-website-icon-item ${newCategoryData.icon === icon ? 'selected' : ''}`}
+                            onClick={() => setNewCategoryData(prev => ({ ...prev, icon }))}
+                            disabled={creatingCategory}
+                            title={icon}
+                          >
+                            {icon}
+                          </button>
+                        ))}
+                      </div>
+                      <div className="add-website-icon-custom">
+                        <input
+                          type="text"
+                          className="add-website-input"
+                          placeholder="或输入自定义图标（例如：📁）"
+                          value={newCategoryData.icon && !COMMON_ICONS.includes(newCategoryData.icon) ? newCategoryData.icon : ''}
+                          onChange={(e) => setNewCategoryData(prev => ({ ...prev, icon: e.target.value }))}
                           disabled={creatingCategory}
-                          title={icon}
-                        >
-                          {icon}
-                        </button>
-                      ))}
-                    </div>
-                    <div className="add-website-icon-custom">
-                      <input
-                        type="text"
-                        className="add-website-input"
-                        placeholder="或输入自定义图标（例如：📁）"
-                        value={newCategoryData.icon && !COMMON_ICONS.includes(newCategoryData.icon) ? newCategoryData.icon : ''}
-                        onChange={(e) => setNewCategoryData(prev => ({ ...prev, icon: e.target.value }))}
-                        disabled={creatingCategory}
-                        style={{ marginTop: '0.5rem', flex: 1 }}
-                      />
-                      {newCategoryData.icon && (
-                        <button
-                          type="button"
-                          className="add-website-icon-clear"
-                          onClick={() => setNewCategoryData(prev => ({ ...prev, icon: '' }))}
-                          disabled={creatingCategory}
-                        >
-                          清除
-                        </button>
-                      )}
+                          style={{ marginTop: '0.5rem', flex: 1 }}
+                        />
+                        {newCategoryData.icon && (
+                          <button
+                            type="button"
+                            className="add-website-icon-clear"
+                            onClick={() => setNewCategoryData(prev => ({ ...prev, icon: '' }))}
+                            disabled={creatingCategory}
+                          >
+                            清除
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
+                  <button
+                    type="button"
+                    className="add-website-create-category-btn"
+                    onClick={handleCreateCategory}
+                    disabled={creatingCategory || !newCategoryData.name?.trim()}
+                  >
+                    {creatingCategory ? (
+                      <>
+                        <span className="add-website-btn-spinner"></span>
+                        <span>创建中...</span>
+                      </>
+                    ) : (
+                      '创建分类'
+                    )}
+                  </button>
                 </div>
-                <button
-                  type="button"
-                  className="add-website-create-category-btn"
-                  onClick={handleCreateCategory}
-                  disabled={creatingCategory || !newCategoryData.name?.trim()}
-                >
-                  {creatingCategory ? (
-                    <>
-                      <span className="add-website-btn-spinner"></span>
-                      <span>创建中...</span>
-                    </>
-                  ) : (
-                    '创建分类'
-                  )}
-                </button>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          )}
 
           <div className="add-website-form-group">
             <label className="add-website-label">

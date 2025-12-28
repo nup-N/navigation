@@ -67,10 +67,9 @@ export class CategoriesService {
       otherCategory = this.categoryRepository.create({
         name: '其他',
         icon: '📦',
-        sortOrder: 9999, // 放在最后
+        sortOrder: 9999,
       });
       otherCategory = await this.categoryRepository.save(otherCategory);
-      console.log('✅ 创建"其他"分类:', otherCategory.id);
     }
 
     return otherCategory;
@@ -97,12 +96,9 @@ export class CategoriesService {
         { categoryId: id },
         { categoryId: otherCategory.id },
       );
-
-      console.log(`📦 已将 ${websites.length} 个网站移动到"其他"分类`);
     }
 
     // 删除分类
     await this.categoryRepository.delete(id);
-    console.log(`✅ 已删除分类: ${category.name}`);
   }
 }

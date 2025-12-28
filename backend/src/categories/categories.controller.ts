@@ -35,8 +35,6 @@ export class CategoriesController {
   @Get()
   @UseGuards(OptionalAuthGuard)
   findAll(@Request() req): Promise<Category[]> {
-    console.log('📋 [GET /categories] 获取所有分类');
-    console.log('👤 当前用户:', req.user || '匿名用户');
     return this.categoriesService.findAll(req.user);
   }
 
@@ -47,8 +45,6 @@ export class CategoriesController {
   @Get(':id')
   @UseGuards(OptionalAuthGuard)
   findOne(@Param('id') id: string, @Request() req): Promise<Category | null> {
-    console.log(`📋 [GET /categories/${id}] 获取分类详情`);
-    console.log('👤 当前用户:', req.user || '匿名用户');
     return this.categoriesService.findOne(+id);
   }
 
@@ -60,9 +56,6 @@ export class CategoriesController {
   @UseGuards(AuthGuard, RolesGuard)
   @Roles('admin')
   create(@Body() category: Partial<Category>, @Request() req): Promise<Category> {
-    console.log('📋 [POST /categories] 创建分类');
-    console.log('👤 操作用户:', req.user);
-    console.log('📝 分类数据:', category);
     return this.categoriesService.create(category);
   }
 
@@ -78,9 +71,6 @@ export class CategoriesController {
     @Body() category: Partial<Category>,
     @Request() req,
   ): Promise<Category | null> {
-    console.log(`📋 [PUT /categories/${id}] 更新分类`);
-    console.log('👤 操作用户:', req.user);
-    console.log('📝 更新数据:', category);
     return this.categoriesService.update(+id, category);
   }
 
@@ -92,8 +82,6 @@ export class CategoriesController {
   @UseGuards(AuthGuard, RolesGuard)
   @Roles('admin')
   remove(@Param('id') id: string, @Request() req): Promise<void> {
-    console.log(`📋 [DELETE /categories/${id}] 删除分类`);
-    console.log('👤 操作用户:', req.user);
     return this.categoriesService.remove(+id);
   }
 }

@@ -37,14 +37,10 @@ export class WebsitesController {
    */
   @Get()
   @UseGuards(OptionalAuthGuard)
-  async findAll(
+  async   findAll(
     @Query('categoryId') categoryId?: string,
     @Request() req?,
   ): Promise<Website[]> {
-    console.log('📋 [GET /websites] 获取网站列表');
-    console.log('👤 当前用户:', req.user || '匿名用户');
-    console.log('🔍 分类筛选:', categoryId || '全部');
-
     // 处理"我的"分类（categoryId=-1）
     if (categoryId === '-1') {
       if (!req.user || !req.user.id) {
@@ -79,8 +75,6 @@ export class WebsitesController {
   @Get(':id')
   @UseGuards(OptionalAuthGuard)
   findOne(@Param('id') id: string, @Request() req): Promise<Website | null> {
-    console.log(`📋 [GET /websites/${id}] 获取网站详情`);
-    console.log('👤 当前用户:', req.user || '匿名用户');
     return this.websitesService.findOne(+id, req.user);
   }
 
@@ -92,9 +86,6 @@ export class WebsitesController {
   @UseGuards(AuthGuard, RolesGuard)
   @Roles('user')
   create(@Body() website: Partial<Website>, @Request() req): Promise<Website> {
-    console.log('📋 [POST /websites] 创建网站');
-    console.log('👤 操作用户:', req.user);
-    console.log('📝 网站数据:', website);
     return this.websitesService.create(website, req.user);
   }
 
@@ -110,9 +101,6 @@ export class WebsitesController {
     @Body() website: Partial<Website>,
     @Request() req,
   ): Promise<Website | null> {
-    console.log(`📋 [PUT /websites/${id}] 更新网站`);
-    console.log('👤 操作用户:', req.user);
-    console.log('📝 更新数据:', website);
     return this.websitesService.update(+id, website, req.user);
   }
 
@@ -124,8 +112,6 @@ export class WebsitesController {
   @UseGuards(AuthGuard, RolesGuard)
   @Roles('user')
   remove(@Param('id') id: string, @Request() req): Promise<void> {
-    console.log(`📋 [DELETE /websites/${id}] 删除网站`);
-    console.log('👤 操作用户:', req.user);
     return this.websitesService.remove(+id, req.user);
   }
 
@@ -136,8 +122,6 @@ export class WebsitesController {
   @Post(':id/click')
   @UseGuards(OptionalAuthGuard)
   incrementClicks(@Param('id') id: string, @Request() req): Promise<void> {
-    console.log(`📋 [POST /websites/${id}/click] 增加点击次数`);
-    console.log('👤 当前用户:', req.user || '匿名用户');
     return this.websitesService.incrementClicks(+id);
   }
 
@@ -149,8 +133,6 @@ export class WebsitesController {
   @UseGuards(AuthGuard, RolesGuard)
   @Roles('user')
   async addFavorite(@Param('id') id: string, @Request() req): Promise<{ message: string }> {
-    console.log(`📋 [POST /websites/${id}/favorite] 收藏网站`);
-    console.log('👤 操作用户:', req.user);
     await this.websitesService.addFavorite(+id, req.user.id);
     return { message: '收藏成功' };
   }
@@ -163,8 +145,6 @@ export class WebsitesController {
   @UseGuards(AuthGuard, RolesGuard)
   @Roles('user')
   async removeFavorite(@Param('id') id: string, @Request() req): Promise<{ message: string }> {
-    console.log(`📋 [DELETE /websites/${id}/favorite] 取消收藏`);
-    console.log('👤 操作用户:', req.user);
     await this.websitesService.removeFavorite(+id, req.user.id);
     return { message: '取消收藏成功' };
   }
